@@ -215,11 +215,11 @@
 
 </script>
 <script>
-    Dropzone.options.imagesDropzone = {
+    var uploadedImagesMap = {}
+Dropzone.options.imagesDropzone = {
     url: '{{ route('admin.projects.storeMedia') }}',
     maxFilesize: 4, // MB
     acceptedFiles: '.jpeg,.jpg,.png,.gif',
-    maxFiles: 1,
     addRemoveLinks: true,
     headers: {
       'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -230,42 +230,48 @@
       height: 4096
     },
     success: function (file, response) {
-      $('form').find('input[name="images"]').remove()
-      $('form').append('<input type="hidden" name="images" value="' + response.name + '">')
+      $('form').append('<input type="hidden" name="images[]" value="' + response.name + '">')
+      uploadedImagesMap[file.name] = response.name
     },
     removedfile: function (file) {
+      console.log(file)
       file.previewElement.remove()
-      if (file.status !== 'error') {
-        $('form').find('input[name="images"]').remove()
-        this.options.maxFiles = this.options.maxFiles + 1
+      var name = ''
+      if (typeof file.file_name !== 'undefined') {
+        name = file.file_name
+      } else {
+        name = uploadedImagesMap[file.name]
       }
+      $('form').find('input[name="images[]"][value="' + name + '"]').remove()
     },
     init: function () {
 @if(isset($project) && $project->images)
-      var file = {!! json_encode($project->images) !!}
+      var files = {!! json_encode($project->images) !!}
+          for (var i in files) {
+          var file = files[i]
           this.options.addedfile.call(this, file)
-      this.options.thumbnail.call(this, file, file.preview ?? file.preview_url)
-      file.previewElement.classList.add('dz-complete')
-      $('form').append('<input type="hidden" name="images" value="' + file.file_name + '">')
-      this.options.maxFiles = this.options.maxFiles - 1
+          this.options.thumbnail.call(this, file, file.preview ?? file.preview_url)
+          file.previewElement.classList.add('dz-complete')
+          $('form').append('<input type="hidden" name="images[]" value="' + file.file_name + '">')
+        }
 @endif
     },
-    error: function (file, response) {
-        if ($.type(response) === 'string') {
-            var message = response //dropzone sends it's own error messages in string
-        } else {
-            var message = response.errors.file
-        }
-        file.previewElement.classList.add('dz-error')
-        _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
-        _results = []
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            node = _ref[_i]
-            _results.push(node.textContent = message)
-        }
+     error: function (file, response) {
+         if ($.type(response) === 'string') {
+             var message = response //dropzone sends it's own error messages in string
+         } else {
+             var message = response.errors.file
+         }
+         file.previewElement.classList.add('dz-error')
+         _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
+         _results = []
+         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+             node = _ref[_i]
+             _results.push(node.textContent = message)
+         }
 
-        return _results
-    }
+         return _results
+     }
 }
 
 </script>

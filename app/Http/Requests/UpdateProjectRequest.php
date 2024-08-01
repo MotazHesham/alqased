@@ -24,6 +24,9 @@ class UpdateProjectRequest extends FormRequest
             'main_image' => [
                 'required',
             ],
+            'images' => [
+                'array',
+            ],
             'client' => [
                 'string',
                 'nullable',

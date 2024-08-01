@@ -56,11 +56,11 @@
                             {{ trans('cruds.project.fields.images') }}
                         </th>
                         <td>
-                            @if($project->images)
-                                <a href="{{ $project->images->getUrl() }}" target="_blank" style="display: inline-block">
-                                    <img src="{{ $project->images->getUrl('thumb') }}">
+                            @foreach($project->images as $key => $media)
+                                <a href="{{ $media->getUrl() }}" target="_blank" style="display: inline-block">
+                                    <img src="{{ $media->getUrl('thumb') }}">
                                 </a>
-                            @endif
+                            @endforeach
                         </td>
                     </tr>
                     <tr>
