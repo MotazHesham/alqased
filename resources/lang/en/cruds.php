@@ -89,8 +89,8 @@ return [
             'title_3_helper'     => ' ',
             'button_name'        => 'Button Name',
             'button_name_helper' => ' ',
-            'button_text'        => 'Button Text',
-            'button_text_helper' => ' ',
+            'button_url'         => 'Button Url',
+            'button_url_helper'  => ' ',
         ],
     ],
     'auditLog' => [

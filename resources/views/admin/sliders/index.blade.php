@@ -44,7 +44,7 @@
                             {{ trans('cruds.slider.fields.button_name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.slider.fields.button_text') }}
+                            {{ trans('cruds.slider.fields.button_url') }}
                         </th>
                         <th>
                             &nbsp;
@@ -84,7 +84,7 @@
                                 {{ $slider->button_name ?? '' }}
                             </td>
                             <td>
-                                {{ $slider->button_text ?? '' }}
+                                {{ $slider->button_url ?? '' }}
                             </td>
                             <td>
                                 @can('slider_show')

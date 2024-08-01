@@ -32,7 +32,7 @@ class Slider extends Model implements HasMedia
         'title_2',
         'title_3',
         'button_name',
-        'button_text',
+        'button_url',
         'created_at',
         'updated_at',
         'deleted_at',
