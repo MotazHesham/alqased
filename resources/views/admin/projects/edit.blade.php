@@ -127,7 +127,7 @@
             </div>
             <div class="form-group">
                 <label for="tags">{{ trans('cruds.project.fields.tags') }}</label>
-                <textarea class="form-control {{ $errors->has('tags') ? 'is-invalid' : '' }}" name="tags" id="tags">{{ old('tags', $project->tags) }}</textarea>
+                <input type="text" class="form-control {{ $errors->has('tags') ? 'is-invalid' : '' }}" name="tags[]" value="{{ $project->tags }}" placeholder="add tags ..." data-role="tagsinput">
                 @if($errors->has('tags'))
                     <div class="invalid-feedback">
                         {{ $errors->first('tags') }}

@@ -100,7 +100,9 @@ class ProjectsController extends Controller
 
     public function store(StoreProjectRequest $request)
     {
-        $project = Project::create($request->all());
+        $validated_request = $request->all();
+        $validated_request['tags'] = implode('|',$request->tags);  
+        $project = Project::create($validated_request);
 
         if ($request->input('main_image', false)) {
             $project->addMedia(storage_path('tmp/uploads/' . basename($request->input('main_image'))))->toMediaCollection('main_image');
@@ -126,7 +128,9 @@ class ProjectsController extends Controller
 
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        $project->update($request->all());
+        $validated_request = $request->all();
+        $validated_request['tags'] = implode('|',$request->tags);  
+        $project->update($validated_request);
 
         if ($request->input('main_image', false)) {
             if (! $project->main_image || $request->input('main_image') !== $project->main_image->file_name) {
