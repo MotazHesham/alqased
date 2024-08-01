@@ -62,15 +62,15 @@ class ProjectsController extends Controller
                 return '';
             });
             $table->editColumn('images', function ($row) {
-                if ($photo = $row->images) {
-                    return sprintf(
-                        '<a href="%s" target="_blank"><img src="%s" width="50px" height="50px"></a>',
-                        $photo->url,
-                        $photo->thumbnail
-                    );
+                if (! $row->images) {
+                    return '';
+                }
+                $links = [];
+                foreach ($row->images as $media) {
+                    $links[] = '<a href="' . $media->getUrl() . '" target="_blank"><img src="' . $media->getUrl('thumb') . '" width="50px" height="50px"></a>';
                 }
 
-                return '';
+                return implode(' ', $links);
             });
             $table->editColumn('published', function ($row) {
                 return '<input type="checkbox" disabled ' . ($row->published ? 'checked' : null) . '>';
@@ -106,8 +106,8 @@ class ProjectsController extends Controller
             $project->addMedia(storage_path('tmp/uploads/' . basename($request->input('main_image'))))->toMediaCollection('main_image');
         }
 
-        if ($request->input('images', false)) {
-            $project->addMedia(storage_path('tmp/uploads/' . basename($request->input('images'))))->toMediaCollection('images');
+        foreach ($request->input('images', []) as $file) {
+            $project->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('images');
         }
 
         if ($media = $request->input('ck-media', false)) {
@@ -139,15 +139,18 @@ class ProjectsController extends Controller
             $project->main_image->delete();
         }
 
-        if ($request->input('images', false)) {
-            if (! $project->images || $request->input('images') !== $project->images->file_name) {
-                if ($project->images) {
-                    $project->images->delete();
+        if (count($project->images) > 0) {
+            foreach ($project->images as $media) {
+                if (! in_array($media->file_name, $request->input('images', []))) {
+                    $media->delete();
                 }
-                $project->addMedia(storage_path('tmp/uploads/' . basename($request->input('images'))))->toMediaCollection('images');
             }
-        } elseif ($project->images) {
-            $project->images->delete();
+        }
+        $media = $project->images->pluck('file_name')->toArray();
+        foreach ($request->input('images', []) as $file) {
+            if (count($media) === 0 || ! in_array($file, $media)) {
+                $project->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('images');
+            }
         }
 
         return redirect()->route('admin.projects.index');

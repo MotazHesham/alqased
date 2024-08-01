@@ -72,14 +72,14 @@ class Project extends Model implements HasMedia
 
     public function getImagesAttribute()
     {
-        $file = $this->getMedia('images')->last();
-        if ($file) {
-            $file->url       = $file->getUrl();
-            $file->thumbnail = $file->getUrl('thumb');
-            $file->preview   = $file->getUrl('preview');
-        }
+        $files = $this->getMedia('images');
+        $files->each(function ($item) {
+            $item->url       = $item->getUrl();
+            $item->thumbnail = $item->getUrl('thumb');
+            $item->preview   = $item->getUrl('preview');
+        });
 
-        return $file;
+        return $files;
     }
 
     public function getStartAttribute($value)
