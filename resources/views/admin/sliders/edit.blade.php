@@ -75,14 +75,14 @@
                 <span class="help-block">{{ trans('cruds.slider.fields.button_name_helper') }}</span>
             </div>
             <div class="form-group">
-                <label for="button_text">{{ trans('cruds.slider.fields.button_text') }}</label>
-                <input class="form-control {{ $errors->has('button_text') ? 'is-invalid' : '' }}" type="text" name="button_text" id="button_text" value="{{ old('button_text', $slider->button_text) }}">
-                @if($errors->has('button_text'))
+                <label for="button_url">{{ trans('cruds.slider.fields.button_url') }}</label>
+                <input class="form-control {{ $errors->has('button_url') ? 'is-invalid' : '' }}" type="text" name="button_url" id="button_url" value="{{ old('button_url', $slider->button_url) }}">
+                @if($errors->has('button_url'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('button_text') }}
+                        {{ $errors->first('button_url') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.slider.fields.button_text_helper') }}</span>
+                <span class="help-block">{{ trans('cruds.slider.fields.button_url_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">

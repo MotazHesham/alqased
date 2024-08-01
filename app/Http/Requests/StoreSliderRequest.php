@@ -36,7 +36,7 @@ class StoreSliderRequest extends FormRequest
                 'string',
                 'nullable',
             ],
-            'button_text' => [
+            'button_url' => [
                 'string',
                 'nullable',
             ],

@@ -77,10 +77,10 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.slider.fields.button_text') }}
+                            {{ trans('cruds.slider.fields.button_url') }}
                         </th>
                         <td>
-                            {{ $slider->button_text }}
+                            {{ $slider->button_url }}
                         </td>
                     </tr>
                 </tbody>
